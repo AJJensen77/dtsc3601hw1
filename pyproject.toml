@@ -1,0 +1,21 @@
+[project]
+name = "dtsc-3601-hw1"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "A.J. Jensen", email = "ajense16@charlotte.edu" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.11.1",
+    "numpy>=2.5.2",
+    "pandas>=3.0.5",
+    "streamlit>=1.62.0",
+]
+
+[project.scripts]
+dtsc-3601-hw1 = "dtsc_3601_hw1:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
