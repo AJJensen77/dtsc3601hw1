@@ -1,0 +1,29 @@
+[project]
+name = "dtsc-3601-hw2"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "A.J. Jensen", email = "ajense16@charlotte.edu" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.11.1",
+    "numpy>=2.5.2",
+    "pandas>=3.0.5",
+    "psycopg[binary]>=3.3.4",
+    "python-dotenv>=1.2.3",
+    "sqlalchemy>=2.0.52",
+    "streamlit>=1.62.0",
+]
+
+[project.scripts]
+dtsc-3601-hw2 = "dtsc_3601_hw2:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "modal>=1.5.5",
+]
