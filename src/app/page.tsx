@@ -24,8 +24,7 @@ export default async function Home() {
             NHL Skater Analytics
           </h1>
           <p className="mt-3 max-w-xl text-muted-foreground">
-            Live league-wide skater stats, served straight from a Supabase
-            Postgres database and rendered on Vercel.
+            Live league-wide skater stats, sourced from MoneyPuck.
           </p>
 
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -51,8 +50,8 @@ export default async function Home() {
 
       <Separator />
       <footer className="mx-auto max-w-6xl px-6 py-8 text-sm text-muted-foreground">
-        Data: MoneyPuck skater stats, loaded into Supabase Postgres. Built with
-        Next.js, shadcn/ui, and Recharts — deployed on Vercel.
+        Data: MoneyPuck skater stats. Built with Next.js, shadcn/ui, and
+        Recharts.
       </footer>
     </div>
   );

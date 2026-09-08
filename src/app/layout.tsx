@@ -14,8 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "NHL Skater Analytics",
-  description:
-    "2025-26 NHL skater stats dashboard, served from Supabase and deployed on Vercel.",
+  description: "2025-26 NHL skater stats dashboard, powered by MoneyPuck data.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

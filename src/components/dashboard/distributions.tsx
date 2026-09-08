@@ -41,6 +41,36 @@ const scatterConfig = {
   goals: { label: "Goals", color: "var(--chart-3)" },
 } satisfies ChartConfig;
 
+type ScatterPoint = { name: string; xGoals: number; goals: number };
+
+function ScatterTooltip({
+  active,
+  payload,
+}: {
+  active?: boolean;
+  payload?: { payload: ScatterPoint }[];
+}) {
+  if (!active || !payload?.length) return null;
+  const point = payload[0].payload as ScatterPoint;
+  return (
+    <div className="grid gap-1 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl">
+      <div className="font-medium text-foreground">{point.name}</div>
+      <div className="flex items-center justify-between gap-4 text-muted-foreground">
+        <span>Expected Goals</span>
+        <span className="font-mono tabular-nums text-foreground">
+          {point.xGoals}
+        </span>
+      </div>
+      <div className="flex items-center justify-between gap-4 text-muted-foreground">
+        <span>Goals</span>
+        <span className="font-mono tabular-nums text-foreground">
+          {point.goals}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export function Distributions({ skaters }: { skaters: Skater[] }) {
   const qualified = useMemo(
     () => skaters.filter((s) => s.gamesPlayed >= MIN_GAMES),
@@ -72,6 +102,13 @@ export function Distributions({ skaters }: { skaters: Skater[] }) {
           <CardDescription>
             Qualified skaters (min {MIN_GAMES} games played)
           </CardDescription>
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            Corsi % is the share of all shot attempts (shots on goal, missed
+            shots, and blocked shots) taken by a player&apos;s team, versus
+            the opponent&apos;s, while that player is on the ice — a proxy
+            for puck possession and shot-attempt dominance. Above 50% means
+            their team out-attempted the opponent while they played.
+          </p>
         </CardHeader>
         <CardContent>
           <ChartContainer config={corsiConfig} className="aspect-video w-full">
@@ -130,7 +167,7 @@ export function Distributions({ skaters }: { skaters: Skater[] }) {
               />
               <ChartTooltip
                 cursor={{ strokeDasharray: "3 3" }}
-                content={<ChartTooltipContent hideLabel />}
+                content={<ScatterTooltip />}
               />
               <Scatter data={scatterData} fill="var(--color-goals)" fillOpacity={0.55} />
             </ScatterChart>
