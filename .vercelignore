@@ -1,0 +1,6 @@
+.env
+.env.local
+.env.check
+skaters.csv
+scripts
+supabase
