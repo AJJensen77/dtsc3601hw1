@@ -1,0 +1,156 @@
+{
+  "info": {
+    "name": "NHL Similar Player Finder",
+    "description": "Assertions against the deployed Modal API for the NHL Similar Player Finder pipeline (health, pipeline info, valid POST, invalid POST).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://ajjensen77--nhl-similar-player-finder-web.modal.run"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Reports ok status', function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body.status).to.eql('ok');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pipeline Info",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/info",
+          "host": ["{{base_url}}"],
+          "path": ["info"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Describes the fitted pipeline', function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body).to.have.property('sklearn_version');",
+              "    pm.expect(body).to.have.property('built_at');",
+              "    pm.expect(body.steps).to.include('rates');",
+              "    pm.expect(body.steps).to.include('scale');",
+              "    pm.expect(body.n_players_indexed).to.be.a('number').greaterThan(0);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Similar Players - Valid POST",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"games_played\": 80,\n  \"goals\": 40,\n  \"assists\": 50,\n  \"points\": 90,\n  \"hits\": 30,\n  \"penalty_minutes\": 20,\n  \"shots_on_goal\": 250,\n  \"x_goals\": 35.5,\n  \"takeaways\": 40,\n  \"giveaways\": 35,\n  \"faceoffs_won\": 600,\n  \"on_ice_corsi_pct\": 0.53,\n  \"k\": 5\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/similar",
+          "host": ["{{base_url}}"],
+          "path": ["similar"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Returns 5 similar players and an anomaly score', function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body.similar_players).to.be.an('array').with.lengthOf(5);",
+              "    pm.expect(body.similar_players[0]).to.have.property('name');",
+              "    pm.expect(body.similar_players[0]).to.have.property('distance');",
+              "    pm.expect(body.anomaly_score).to.be.a('number');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Similar Players - Invalid POST (422)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"games_played\": 200,\n  \"goals\": 40,\n  \"assists\": 50,\n  \"points\": 90,\n  \"hits\": 30,\n  \"penalty_minutes\": 20,\n  \"shots_on_goal\": 250,\n  \"x_goals\": 35.5,\n  \"takeaways\": 40,\n  \"giveaways\": 35,\n  \"faceoffs_won\": 600,\n  \"on_ice_corsi_pct\": 1.5,\n  \"k\": 5\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/similar",
+          "host": ["{{base_url}}"],
+          "path": ["similar"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 422', function () {",
+              "    pm.response.to.have.status(422);",
+              "});",
+              "",
+              "pm.test('Reports validation errors for out-of-range fields', function () {",
+              "    const body = pm.response.json();",
+              "    const fields = body.detail.map((d) => d.loc[d.loc.length - 1]);",
+              "    pm.expect(fields).to.include('games_played');",
+              "    pm.expect(fields).to.include('on_ice_corsi_pct');",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

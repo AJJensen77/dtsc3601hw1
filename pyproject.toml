@@ -1,0 +1,24 @@
+[project]
+name = "dtsc-3601-hw4"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "A.J. Jensen", email = "ajense16@charlotte.edu" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.141.1",
+    "joblib>=1.6.0",
+    "numpy>=2.5.3",
+    "pandas>=3.0.5",
+    "scikit-learn>=1.9.1",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "modal>=1.5.5",
+]
