@@ -87,6 +87,17 @@ def _ensure_loaded() -> None:
         )
 
 
+@app.get("/")
+def root():
+    return {
+        "service": "NHL Similar Player Finder",
+        "docs": "/docs",
+        "health": "/health",
+        "info": "/info",
+        "similar": "POST /similar",
+    }
+
+
 @app.get("/health")
 def health():
     _ensure_loaded()
